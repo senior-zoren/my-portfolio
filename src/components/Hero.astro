@@ -1,0 +1,186 @@
+---
+// src/components/Hero.astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+
+// Filter markdown entries by type
+const dictProjects = allProjects
+  .filter((p: CollectionEntry<'projects'>) => p.data.type === 'dict')
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+const personalProjects = allProjects
+  .filter((p: CollectionEntry<'projects'>) => p.data.type === 'personal')
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+const techStack = [
+  "PHP",
+  "Python",
+  "Laravel",
+  "CodeIgniter",
+  "JavaScript",
+  "Alpine.js",
+  "Tailwind CSS",
+  "Bootstrap",
+  "MySQL",
+  "PostgreSQL",
+  "Git"
+];
+---
+
+<main class="max-w-4xl mx-auto px-6 py-16 space-y-16 text-slate-800 font-sans">
+
+  <!-- Hero Section: Framed Profile Card -->
+  <header class="p-8 bg-stone-100/80 border border-stone-200 rounded-2xl space-y-6">
+    <!-- Top Row: Role Title & Status Badge -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <span class="text-xs font-semibold uppercase tracking-wider text-stone-400">Software Engineer / Computer Programmer I</span>
+        <h1 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900">
+          Vic Zoren Abucot
+        </h1>
+      </div>
+
+      <!-- Status Badge -->
+      <div class="space-y-1.5 self-start sm:self-auto">
+        <span class="text-[11px] font-semibold uppercase tracking-wider text-stone-400 block">Status</span>
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white border border-stone-200 rounded-md shadow-sm text-xs font-medium text-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          Available for Work
+        </div>
+      </div>
+    </div>
+
+    <p class="text-slate-600 text-base leading-relaxed max-w-2xl">
+      Specializing in web application backends, desktop utilities, REST API integrations, and database design using PHP and Python frameworks.
+    </p>
+
+    <!-- Core Stack Section -->
+    <div class="pt-2 border-t border-stone-200/80 space-y-2">
+      <span class="text-xs font-semibold uppercase tracking-wider text-stone-400 block">Core Stack</span>
+      <div class="flex flex-wrap gap-2">
+        {techStack.map((tech) => (
+          <span class="px-3 py-1 bg-white text-slate-800 border border-stone-200 rounded-md text-xs font-medium shadow-sm">
+            {tech}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+      <div class="flex items-center gap-3">
+        <a href="mailto:vicabucot1234@gmail.com" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm rounded-lg transition-colors shadow-sm">
+          Get in Touch
+        </a>
+        <a href="/my_resume.pdf" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-white hover:bg-stone-50 text-slate-700 border border-stone-300 font-medium text-sm rounded-lg transition-colors shadow-sm">
+          View Resume
+        </a>
+      </div>
+      <div class="flex items-center gap-4 text-xs font-semibold text-stone-600">
+        <a href="https://github.com/senior-zoren" target="_blank" rel="noopener noreferrer" class="hover:text-slate-900 transition-colors">GitHub &rarr;</a>
+        <a href="https://www.linkedin.com/in/vic-zoren-abucot-42a5a9290/" target="_blank" rel="noopener noreferrer" class="hover:text-slate-900 transition-colors">LinkedIn &rarr;</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Work Experience: Government Systems Grid -->
+  <section class="space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-baseline justify-between border-b border-stone-200 pb-3 gap-1">
+      <h2 class="text-xl font-serif font-bold text-slate-900">
+        Government Enterprise Systems
+      </h2>
+      <span class="text-xs text-stone-500 font-medium">
+        DICT — Computer Programmer I
+      </span>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      {dictProjects.map((project: CollectionEntry<'projects'>) => (
+        <a 
+          href={`/projects/${project.id}`} 
+          class="group p-5 bg-stone-50/60 border border-stone-200 rounded-lg space-y-2 hover:border-stone-400 transition-colors block"
+        >
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-800 tracking-wide">
+              {project.data.code || "DICT"}
+            </span>
+            <span class="text-[11px] text-stone-400 font-mono group-hover:text-slate-900 transition-colors">
+              Read Case Study &rarr;
+            </span>
+          </div>
+          <h3 class="text-sm font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">
+            {project.data.title}
+          </h3>
+          <p class="text-xs text-stone-600 leading-relaxed">
+            {project.data.description}
+          </p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Personal Projects Section -->
+  <section class="space-y-6">
+    <div class="border-b border-stone-200 pb-3">
+      <h2 class="text-xl font-serif font-bold text-slate-900">
+        Personal & Independent Systems
+      </h2>
+      <p class="text-xs text-stone-500 mt-1">Independent tools and applications with detailed case studies.</p>
+    </div>
+
+    <div class="divide-y divide-stone-200">
+      {personalProjects.map((project: CollectionEntry<'projects'>) => (
+        <div class="py-6 first:pt-0 last:pb-0 space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-bold text-slate-900 hover:text-indigo-600 transition-colors">
+              <a href={`/projects/${project.id}`}>
+                {project.data.title}
+              </a>
+            </h3>
+            <span class="text-xs text-stone-400 font-mono">
+              {project.data.publishDate.getFullYear()}
+            </span>
+          </div>
+
+          <p class="text-sm text-stone-600 leading-relaxed">
+            {project.data.description}
+          </p>
+
+          <div class="flex flex-wrap gap-1.5 py-1">
+            {project.data.tags.map((tag: string) => (
+              <span class="px-2.5 py-0.5 bg-white text-slate-800 border border-stone-200 rounded text-[11px] font-medium shadow-sm">
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <div class="flex items-center gap-4 pt-2 text-xs font-medium">
+            <a href={`/projects/${project.id}`} class="text-slate-900 hover:underline">
+              Read Case Study &rarr;
+            </a>
+            {project.data.github && (
+              <a href={project.data.github} target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-slate-900">
+                Repository
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Contact Footer -->
+  <footer class="p-8 bg-stone-100 border border-stone-200 rounded-xl space-y-3">
+    <h3 class="text-lg font-serif font-bold text-slate-900">Get in touch</h3>
+    <p class="text-sm text-stone-600 leading-relaxed max-w-lg">
+      I am available for technical discussions, software development contracts, or career opportunities.
+    </p>
+    <div class="pt-2">
+      <a href="mailto:vicabucot1234@gmail.com" class="text-sm font-semibold text-slate-900 underline hover:text-stone-600">
+        vicabucot1234@gmail.com
+      </a>
+    </div>
+  </footer>
+
+</main>

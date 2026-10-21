@@ -1,0 +1,85 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+// 1. Generate static routes for every project in your content collection
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  
+  return projects.map((project: CollectionEntry<'projects'>) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+// 2. Extract project prop passed from getStaticPaths
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+
+// 3. Render the Markdown body content to HTML
+const { Content } = await render(project);
+---
+
+<Layout 
+  title={`${project.data.title} | Vic Zoren Abucot`}
+  description={project.data.description}
+>
+  <article class="max-w-3xl mx-auto px-6 py-16 text-slate-800 font-sans">
+    <!-- Navigation Back Link -->
+    <a href="/" class="text-xs font-semibold uppercase tracking-wider text-stone-500 hover:text-slate-900 inline-flex items-center gap-1 mb-8 transition-colors">
+      &larr; Back to Home
+    </a>
+
+    <!-- Project Header -->
+    <header class="space-y-4 border-b border-stone-200 pb-8">
+      <div class="flex items-center justify-between text-xs font-mono text-stone-400">
+        <span>Case Study</span>
+        <span>{project.data.publishDate.getFullYear()}</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900">{project.data.title}</h1>
+      <p class="text-base text-stone-600 leading-relaxed">{project.data.description}</p>
+
+      <!-- Tags matching the light pill style -->
+      <div class="flex flex-wrap gap-2 pt-2">
+        {project.data.tags.map((tag: string) => (
+          <span class="px-3 py-1 bg-white text-slate-800 border border-stone-200 rounded-md text-xs font-medium shadow-sm">
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <!-- External Links -->
+      <div class="flex flex-wrap gap-3 pt-4 text-xs font-semibold">
+        {project.data.link && (
+          <a 
+            href={project.data.link} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors shadow-sm"
+          >
+            Live Preview &rarr;
+          </a>
+        )}
+        {project.data.github && (
+          <a 
+            href={project.data.github} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="px-4 py-2 bg-white text-stone-700 border border-stone-300 rounded-lg hover:bg-stone-50 transition-colors shadow-sm"
+          >
+            GitHub Repository
+          </a>
+        )}
+      </div>
+    </header>
+
+    <!-- Styled Light Typography Body -->
+    <div class="prose prose-stone max-w-none mt-8 text-slate-700 leading-relaxed">
+      <Content />
+    </div>
+  </article>
+</Layout>
