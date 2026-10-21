@@ -73,7 +73,7 @@ const techStack = [
         <a href="mailto:vicabucot1234@gmail.com" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm rounded-lg transition-colors shadow-sm">
           Get in Touch
         </a>
-        <a href="/my_resume.pdf" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-white hover:bg-stone-50 text-slate-700 border border-stone-300 font-medium text-sm rounded-lg transition-colors shadow-sm">
+        <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/my_resume.pdf`} target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-white hover:bg-stone-50 text-slate-700 border border-stone-300 font-medium text-sm rounded-lg transition-colors shadow-sm">
           View Resume
         </a>
       </div>
@@ -98,7 +98,7 @@ const techStack = [
     <div class="grid gap-4 sm:grid-cols-2">
       {dictProjects.map((project: CollectionEntry<'projects'>) => (
         <a 
-          href={`/projects/${project.id}`} 
+          href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/projects/${project.id}`} 
           class="group p-5 bg-stone-50/60 border border-stone-200 rounded-lg space-y-2 hover:border-stone-400 transition-colors block"
         >
           <div class="flex items-center justify-between">
@@ -134,7 +134,7 @@ const techStack = [
         <div class="py-6 first:pt-0 last:pb-0 space-y-2">
           <div class="flex items-center justify-between">
             <h3 class="text-lg font-bold text-slate-900 hover:text-indigo-600 transition-colors">
-              <a href={`/projects/${project.id}`}>
+              <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/projects/${project.id}`}>
                 {project.data.title}
               </a>
             </h3>
@@ -156,7 +156,7 @@ const techStack = [
           </div>
 
           <div class="flex items-center gap-4 pt-2 text-xs font-medium">
-            <a href={`/projects/${project.id}`} class="text-slate-900 hover:underline">
+            <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/projects/${project.id}`} class="text-slate-900 hover:underline">
               Read Case Study &rarr;
             </a>
             {project.data.github && (
