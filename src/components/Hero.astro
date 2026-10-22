@@ -4,13 +4,17 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 const allProjects = await getCollection('projects');
 
-// Filter markdown entries by type
+// Government / Enterprise Projects
 const dictProjects = allProjects
   .filter((p: CollectionEntry<'projects'>) => p.data.type === 'dict')
   .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
 
-const personalProjects = allProjects
-  .filter((p: CollectionEntry<'projects'>) => p.data.type === 'personal')
+// Featured Active Project (App-Repo)
+const featuredProject = allProjects.find((p) => p.id.includes('app-repo') || p.data.title.toLowerCase().includes('app-repo'));
+
+// Remaining Personal & Independent Projects (VRS, MARIS)
+const remainingPersonalProjects = allProjects
+  .filter((p: CollectionEntry<'projects'>) => p.data.type === 'personal' && p.id !== featuredProject?.id)
   .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
 
 const techStack = [
@@ -26,26 +30,37 @@ const techStack = [
   "PostgreSQL",
   "Git"
 ];
+
+// Helper function to resolve status badge labels safely
+function getProjectStatus(project: CollectionEntry<'projects'>): string {
+  const customStatus = (project.data as Record<string, unknown>).status;
+  if (typeof customStatus === 'string') return customStatus;
+
+  const isVRS = project.id.includes('vrs') || 
+                project.data.title.toLowerCase().includes('van') || 
+                project.data.title.toLowerCase().includes('vehicle');
+
+  return isVRS ? "Client-Ready System" : "Capstone / R&D";
+}
 ---
 
-<main class="max-w-4xl mx-auto px-6 py-16 space-y-16 text-slate-800 font-sans">
+<main class="max-w-4xl mx-auto px-6 py-12 space-y-14 text-slate-800 font-sans">
 
-  <!-- Hero Section: Framed Profile Card -->
-  <header class="p-8 bg-stone-100/80 border border-stone-200 rounded-2xl space-y-6">
-    <!-- Top Row: Role Title & Status Badge -->
+  <!-- 1. HEADER / HERO CARD -->
+  <header class="p-8 bg-stone-100/90 border border-stone-200 rounded-2xl space-y-6 shadow-sm">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div class="space-y-1">
-        <span class="text-xs font-semibold uppercase tracking-wider text-stone-400">Software Engineer / Computer Programmer I</span>
+        <span class="text-xs font-semibold uppercase tracking-wider text-stone-500">Software Engineer / Computer Programmer I</span>
         <h1 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900">
           Vic Zoren Abucot
         </h1>
       </div>
 
       <!-- Status Badge -->
-      <div class="space-y-1.5 self-start sm:self-auto">
-        <span class="text-[11px] font-semibold uppercase tracking-wider text-stone-400 block">Status</span>
-        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white border border-stone-200 rounded-md shadow-sm text-xs font-medium text-slate-700">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+      <div class="space-y-1 self-start sm:self-auto">
+        <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400 block">Availability</span>
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-white border border-stone-200 rounded-md shadow-xs text-xs font-medium text-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           Available for Work
         </div>
       </div>
@@ -55,12 +70,12 @@ const techStack = [
       Specializing in web application backends, desktop utilities, REST API integrations, and database design using PHP and Python frameworks.
     </p>
 
-    <!-- Core Stack Section -->
+    <!-- Core Stack Pills -->
     <div class="pt-2 border-t border-stone-200/80 space-y-2">
-      <span class="text-xs font-semibold uppercase tracking-wider text-stone-400 block">Core Stack</span>
-      <div class="flex flex-wrap gap-2">
+      <span class="text-[11px] font-semibold uppercase tracking-wider text-stone-400 block">Core Technologies</span>
+      <div class="flex flex-wrap gap-1.5">
         {techStack.map((tech) => (
-          <span class="px-3 py-1 bg-white text-slate-800 border border-stone-200 rounded-md text-xs font-medium shadow-sm">
+          <span class="px-2.5 py-1 bg-white text-slate-800 border border-stone-200 rounded-md text-xs font-medium shadow-2xs">
             {tech}
           </span>
         ))}
@@ -68,17 +83,16 @@ const techStack = [
     </div>
 
     <!-- Action Bar -->
-    <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+    <div class="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-stone-200/60">
       <div class="flex items-center gap-3">
-        <a href="mailto:vicabucot1234@gmail.com" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm rounded-lg transition-colors shadow-sm">
+        <a href="mailto:vicabucot1234@gmail.com" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm rounded-lg transition-colors shadow-xs">
           Get in Touch
         </a>
-        <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/my_resume.pdf`} target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-white hover:bg-stone-50 text-slate-700 border border-stone-300 font-medium text-sm rounded-lg transition-colors shadow-sm">
+        <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/my_resume.pdf`} target="_blank" rel="noopener noreferrer" class="px-5 py-2 bg-white hover:bg-stone-50 text-slate-700 border border-stone-300 font-medium text-sm rounded-lg transition-colors shadow-xs">
           View Resume
         </a>
       </div>
-      <div class="flex items-center gap-3 text-stone-600">
-        <!-- GitHub Icon Link -->
+      <div class="flex items-center gap-2 text-stone-600">
         <a 
           href="https://github.com/senior-zoren" 
           target="_blank" 
@@ -90,8 +104,6 @@ const techStack = [
             <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
           </svg>
         </a>
-
-        <!-- LinkedIn Icon Link -->
         <a 
           href="https://www.linkedin.com/in/vic-zoren-abucot-42a5a9290/" 
           target="_blank" 
@@ -107,13 +119,16 @@ const techStack = [
     </div>
   </header>
 
-  <!-- Work Experience: Government Systems Grid -->
-  <section class="space-y-6">
+  <!-- 2. GOVERNMENT ENTERPRISE SYSTEMS (DICT) -->
+  <section class="space-y-5">
     <div class="flex flex-col sm:flex-row sm:items-baseline justify-between border-b border-stone-200 pb-3 gap-1">
-      <h2 class="text-xl font-serif font-bold text-slate-900">
-        Government Enterprise Systems
-      </h2>
-      <span class="text-xs text-stone-500 font-medium">
+      <div>
+        <h2 class="text-xl font-serif font-bold text-slate-900">
+          Government Enterprise Systems
+        </h2>
+        <p class="text-xs text-stone-500">Production platforms engineered for DICT regional operations.</p>
+      </div>
+      <span class="text-xs font-semibold text-slate-700 bg-stone-100 px-2.5 py-1 border border-stone-200 rounded-md">
         DICT — Computer Programmer I
       </span>
     </div>
@@ -122,20 +137,20 @@ const techStack = [
       {dictProjects.map((project: CollectionEntry<'projects'>) => (
         <a 
           href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/projects/${project.id}`} 
-          class="group p-5 bg-stone-50/60 border border-stone-200 rounded-lg space-y-2 hover:border-stone-400 transition-colors block"
+          class="group p-5 bg-stone-50/70 border border-stone-200 rounded-xl space-y-2.5 hover:border-slate-400 hover:bg-white transition-all block shadow-xs"
         >
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-800 tracking-wide">
+            <span class="text-xs font-bold text-slate-900 bg-stone-200/70 px-2 py-0.5 rounded">
               {project.data.code || "DICT"}
             </span>
-            <span class="text-[11px] text-stone-400 font-mono group-hover:text-slate-900 transition-colors">
-              Read Case Study &rarr;
+            <span class="text-xs text-stone-400 font-mono group-hover:text-slate-900 transition-colors">
+              Case Study &rarr;
             </span>
           </div>
-          <h3 class="text-sm font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
             {project.data.title}
           </h3>
-          <p class="text-xs text-stone-600 leading-relaxed">
+          <p class="text-xs text-stone-600 leading-relaxed line-clamp-3">
             {project.data.description}
           </p>
         </a>
@@ -143,63 +158,124 @@ const techStack = [
     </div>
   </section>
 
-  <!-- Personal Projects Section -->
-  <section class="space-y-6">
+  <!-- 3. FEATURED PRODUCTION APPLICATION (App-Repo Spotlight) -->
+  {featuredProject && (
+    <section class="space-y-4">
+      <div class="border-b border-stone-200 pb-3">
+        <h2 class="text-xl font-serif font-bold text-slate-900">
+          Featured Systems & Utilities
+        </h2>
+        <p class="text-xs text-stone-500">Active internal software tools & deployment infrastructure.</p>
+      </div>
+
+      <div class="p-6 bg-slate-900 text-stone-100 rounded-2xl space-y-4 shadow-md">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <span class="text-[11px] font-bold tracking-wider uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-md">
+            Active Production Utility
+          </span>
+          <span class="text-xs font-mono text-stone-400">
+            {featuredProject.data.publishDate.getFullYear()}
+          </span>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="text-xl font-bold text-white hover:text-emerald-400 transition-colors">
+            <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/projects/${featuredProject.id}`}>
+              {featuredProject.data.title}
+            </a>
+          </h3>
+          <p class="text-sm text-stone-300 leading-relaxed max-w-3xl">
+            {featuredProject.data.description}
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-1.5 pt-1">
+          {featuredProject.data.tags.map((tag: string) => (
+            <span class="px-2.5 py-0.5 bg-slate-800 text-stone-200 border border-slate-700 rounded text-[11px] font-medium">
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div class="flex items-center gap-5 pt-2 border-t border-slate-800 text-xs font-semibold">
+          <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/projects/${featuredProject.id}`} class="text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+            Read Technical Case Study &rarr;
+          </a>
+          {featuredProject.data.github && (
+            <a href={featuredProject.data.github} target="_blank" rel="noopener noreferrer" class="text-stone-400 hover:text-white transition-colors">
+              Repository ↗
+            </a>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 4. INDEPENDENT SYSTEMS & R&D (VRS, MARIS) -->
+  <section class="space-y-5">
     <div class="border-b border-stone-200 pb-3">
       <h2 class="text-xl font-serif font-bold text-slate-900">
-        Personal & Independent Systems
+        Independent Systems & R&D
       </h2>
-      <p class="text-xs text-stone-500 mt-1">Independent tools and applications with detailed case studies.</p>
+      <p class="text-xs text-stone-500">Commercial MVP prototypes and capstone research architectures.</p>
     </div>
 
-    <div class="divide-y divide-stone-200">
-      {personalProjects.map((project: CollectionEntry<'projects'>) => (
-        <div class="py-6 first:pt-0 last:pb-0 space-y-2">
-          <div class="flex items-center justify-between">
-            <h3 class="text-lg font-bold text-slate-900 hover:text-indigo-600 transition-colors">
+    <div class="grid gap-4 sm:grid-cols-2">
+      {remainingPersonalProjects.map((project: CollectionEntry<'projects'>) => (
+        <div class="p-5 bg-stone-50/60 border border-stone-200 rounded-xl space-y-3 flex flex-col justify-between hover:border-stone-300 transition-colors">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-semibold uppercase px-2 py-0.5 bg-stone-200/80 text-stone-700 rounded">
+                {getProjectStatus(project)}
+              </span>
+              <span class="text-xs text-stone-400 font-mono">
+                {project.data.publishDate.getFullYear()}
+              </span>
+            </div>
+
+            <h3 class="text-base font-bold text-slate-900 hover:text-indigo-600 transition-colors">
               <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/projects/${project.id}`}>
                 {project.data.title}
               </a>
             </h3>
-            <span class="text-xs text-stone-400 font-mono">
-              {project.data.publishDate.getFullYear()}
-            </span>
+
+            <p class="text-xs text-stone-600 leading-relaxed line-clamp-3">
+              {project.data.description}
+            </p>
           </div>
 
-          <p class="text-sm text-stone-600 leading-relaxed">
-            {project.data.description}
-          </p>
+          <div class="space-y-3 pt-2">
+            <div class="flex flex-wrap gap-1">
+              {project.data.tags.map((tag: string) => (
+                <span class="px-2 py-0.5 bg-white text-slate-700 border border-stone-200 rounded text-[10px] font-medium">
+                  {tag}
+                </span>
+              ))}
+            </div>
 
-          <div class="flex flex-wrap gap-1.5 py-1">
-            {project.data.tags.map((tag: string) => (
-              <span class="px-2.5 py-0.5 bg-white text-slate-800 border border-stone-200 rounded text-[11px] font-medium shadow-sm">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <div class="flex items-center gap-4 pt-2 text-xs font-medium">
-            <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/projects/${project.id}`} class="text-slate-900 hover:underline">
-              Read Case Study &rarr;
-            </a>
-            {project.data.github && (
-              <a href={project.data.github} target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-slate-900">
-                Repository
+            <div class="flex items-center justify-between pt-2 border-t border-stone-200/70 text-xs font-medium">
+              <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/projects/${project.id}`} class="text-slate-900 hover:underline">
+                Case Study &rarr;
               </a>
-            )}
+              {project.data.github && (
+                <a href={project.data.github} target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-slate-900">
+                  Repository ↗
+                </a>
+              )}
+            </div>
           </div>
         </div>
       ))}
     </div>
   </section>
 
-  <!-- Contact Footer -->
+  <!-- 5. CONTACT FOOTER -->
   <footer class="p-8 bg-stone-100 border border-stone-200 rounded-xl space-y-3">
     <h3 class="text-lg font-serif font-bold text-slate-900">Get in touch</h3>
     <p class="text-sm text-stone-600 leading-relaxed max-w-lg">
       I am available for technical discussions, software development contracts, or career opportunities.
     </p>
-    <div class="pt-2">
+    <div class="pt-1">
       <a href="mailto:vicabucot1234@gmail.com" class="text-sm font-semibold text-slate-900 underline hover:text-stone-600">
         vicabucot1234@gmail.com
       </a>

@@ -2,8 +2,9 @@
 title: "App-Repo (Dedicated Application Organizer & Version Control Panel)"
 description: "A centralized binary repository and version control management panel that automates software release distribution for Windows desktop and mobile applications via REST APIs."
 tags: ["PHP", "Laravel", "MySQL", "REST API", "Tailwind CSS"]
-publishDate: 2026-05-20
+publishDate: 2026-08-12
 type: "personal"
+status: "Active Production"
 code: "App-Repo"
 featured: true
 github: "https://github.com/senior-zoren/app-repo"

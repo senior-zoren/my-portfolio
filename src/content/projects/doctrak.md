@@ -2,9 +2,11 @@
 title: "DocTrak (Document Routing Engine)"
 description: "Centralized document routing engine and API gateway with automated PDF checklist verification, PNPKI cryptographic signing, and multi-system dispatch pipelines."
 tags: ["PHP", "Laravel", "MySQL", "JavaScript", "REST API", "Tailwind CSS", "PNPKI"]
-publishDate: 2026-01-28
+publishDate: 2026-10-21
 type: "dict"
+status: "Staging / Pre-Deployment"
 code: "DocTrak"
+featured: true
 github: "https://github.com/senior-zoren"
 ---
 
@@ -12,7 +14,7 @@ github: "https://github.com/senior-zoren"
 
 ## System Overview
 
-**DocTrak** serves as DICT's central document routing highway and API dispatch gateway. Rather than existing as an isolated silo, it acts as an agency-wide integration hub where auxiliary platforms—such as **CHRONO** or centralized Form Libraries—can programmatically transmit generated documents into official routing pipelines.
+**DocTrak** serves as DICT's central document routing highway and API dispatch gateway. Currently deployed to staging for pre-deployment testing and v1 operational refinements, it acts as an agency-wide integration hub where auxiliary platforms—such as **CHRONO** or centralized Form Libraries—programmatically transmit generated documents into official routing pipelines.
 
 The platform streamlines high-volume paperwork by combining automated PDF compliance checklists, PNPKI cryptographic digital signatures, and human-in-the-loop inter-office routing workflows.
 

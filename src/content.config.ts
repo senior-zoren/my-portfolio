@@ -10,6 +10,7 @@ const projects = defineCollection({
     publishDate: z.date(),
     type: z.enum(['dict', 'personal']).default('personal'),
     code: z.string().optional(),
+    status: z.string().optional(), // Added status field (e.g., "Client-Ready System", "Active Production Utility", "Capstone / R&D")
     featured: z.boolean().default(true),
     order: z.number().default(99),
     role: z.string().optional(),

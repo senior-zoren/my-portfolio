@@ -1,4 +1,5 @@
 ---
+// src/pages/projects/[id].astro
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
@@ -21,47 +22,113 @@ const { project } = Astro.props;
 
 // 3. Render the Markdown body content to HTML
 const { Content } = await render(project);
+
+// Category Tag (DICT vs Personal/R&D)
+function getCategoryTag(p: CollectionEntry<'projects'>) {
+  if (p.data.type === 'dict') {
+    return {
+      label: `DICT Enterprise System (${p.data.code || "GOV"})`,
+      class: "bg-stone-200/80 text-stone-800 border-stone-300"
+    };
+  }
+  return {
+    label: "Independent / R&D System",
+    class: "bg-stone-100 text-stone-700 border-stone-200"
+  };
+}
+
+// Dynamic Operational Status Badge (Active Production, Staging, Client-Ready, R&D)
+function getStatusBadge(p: CollectionEntry<'projects'>) {
+  const customStatus = p.data.status;
+  
+  if (customStatus) {
+    if (customStatus.toLowerCase().includes('active')) {
+      return {
+        label: customStatus,
+        class: "bg-emerald-50 text-emerald-800 border-emerald-300"
+      };
+    }
+    if (customStatus.toLowerCase().includes('staging')) {
+      return {
+        label: customStatus,
+        class: "bg-amber-50 text-amber-800 border-amber-300"
+      };
+    }
+    return {
+      label: customStatus,
+      class: "bg-stone-100 text-stone-700 border-stone-300"
+    };
+  }
+
+  // Fallbacks if status is omitted from frontmatter
+  const isVRS = p.id.includes('vrs') || p.data.title.toLowerCase().includes('van');
+  return {
+    label: isVRS ? "Client-Ready System" : "Capstone / R&D",
+    class: "bg-stone-100 text-stone-700 border-stone-200"
+  };
+}
+
+const category = getCategoryTag(project);
+const status = getStatusBadge(project);
 ---
 
 <Layout 
   title={`${project.data.title} | Vic Zoren Abucot`}
   description={project.data.description}
 >
-  <article class="max-w-3xl mx-auto px-6 py-16 text-slate-800 font-sans">
-    <!-- Navigation Back Link (Updated with BASE_URL) -->
-    <a href={import.meta.env.BASE_URL} class="text-xs font-semibold uppercase tracking-wider text-stone-500 hover:text-slate-900 inline-flex items-center gap-1 mb-8 transition-colors">
-      &larr; Back to Home
+  <article class="max-w-3xl mx-auto px-6 py-12 text-slate-800 font-sans">
+    <!-- Navigation Back Link -->
+    <a 
+      href={import.meta.env.BASE_URL} 
+      class="text-xs font-semibold uppercase tracking-wider text-stone-500 hover:text-slate-900 inline-flex items-center gap-1.5 mb-8 transition-colors"
+    >
+      &larr; Back to Overview
     </a>
 
     <!-- Project Header -->
     <header class="space-y-4 border-b border-stone-200 pb-8">
-      <div class="flex items-center justify-between text-xs font-mono text-stone-400">
-        <span>Case Study</span>
-        <span>{project.data.publishDate.getFullYear()}</span>
+      <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+        <!-- Dual Badge Layout: System Category + Operational Status -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class={`px-2.5 py-0.5 border rounded-md text-[11px] font-semibold tracking-wide uppercase ${category.class}`}>
+            {category.label}
+          </span>
+          <span class={`px-2.5 py-0.5 border rounded-md text-[11px] font-semibold tracking-wide uppercase ${status.class}`}>
+            {status.label}
+          </span>
+        </div>
+
+        <span class="text-stone-400">
+          Published {project.data.publishDate.getFullYear()}
+        </span>
       </div>
 
-      <h1 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900">{project.data.title}</h1>
-      <p class="text-base text-stone-600 leading-relaxed">{project.data.description}</p>
+      <h1 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900 leading-tight">
+        {project.data.title}
+      </h1>
+      <p class="text-base text-stone-600 leading-relaxed">
+        {project.data.description}
+      </p>
 
-      <!-- Tags matching the light pill style -->
-      <div class="flex flex-wrap gap-2 pt-2">
+      <!-- Tags Pill Bar -->
+      <div class="flex flex-wrap gap-1.5 pt-2">
         {project.data.tags.map((tag: string) => (
-          <span class="px-3 py-1 bg-white text-slate-800 border border-stone-200 rounded-md text-xs font-medium shadow-sm">
+          <span class="px-2.5 py-1 bg-stone-50 text-slate-800 border border-stone-200 rounded-md text-xs font-medium shadow-2xs">
             {tag}
           </span>
         ))}
       </div>
 
-      <!-- External Links -->
+      <!-- External Action Links -->
       <div class="flex flex-wrap gap-3 pt-4 text-xs font-semibold">
         {project.data.link && (
           <a 
             href={project.data.link} 
             target="_blank" 
             rel="noopener noreferrer" 
-            class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors shadow-sm"
+            class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors shadow-xs inline-flex items-center gap-1"
           >
-            Live Preview &rarr;
+            Live Preview ↗
           </a>
         )}
         {project.data.github && (
@@ -69,15 +136,15 @@ const { Content } = await render(project);
             href={project.data.github} 
             target="_blank" 
             rel="noopener noreferrer" 
-            class="px-4 py-2 bg-white text-stone-700 border border-stone-300 rounded-lg hover:bg-stone-50 transition-colors shadow-sm"
+            class="px-4 py-2 bg-white text-slate-700 border border-stone-300 rounded-lg hover:bg-stone-50 transition-colors shadow-xs inline-flex items-center gap-1"
           >
-            GitHub Repository
+            GitHub Repository ↗
           </a>
         )}
       </div>
     </header>
 
-    <!-- Styled Light Typography Body -->
+    <!-- Markdown Body Content -->
     <div class="prose prose-stone max-w-none mt-8 text-slate-700 leading-relaxed">
       <Content />
     </div>

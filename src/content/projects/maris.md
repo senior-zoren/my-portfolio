@@ -2,7 +2,10 @@
 title: "MARIS (Marine Activity Reporting Information System)"
 description: "An information and logging system designed to monitor maritime operations, track field activity logs, and generate marine reporting analytics."
 tags: ["PHP", "Laravel", "MySQL", "JavaScript", "Tailwind CSS"]
-publishDate: 2026-04-10
+publishDate: 2024-12-15
+type: "personal"
+status: "Capstone / R&D"
+code: "MARIS"
 featured: true
 github: "https://github.com/senior-zoren"
 ---

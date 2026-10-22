@@ -2,7 +2,10 @@
 title: "VRS (Van Reservation System)"
 description: "A public transportation dispatch and booking platform engineered to eliminate terminal passenger congestion via real-time seat reservation and digital QR check-ins."
 tags: ["PHP", "Laravel", "MySQL", "JavaScript", "REST API", "QR Code Engine"]
-publishDate: 2026-03-15
+publishDate: 2026-08-21
+type: "personal"
+status: "Client-Ready System"
+code: "VRS"
 featured: true
 github: "https://github.com/senior-zoren"
 ---
@@ -48,5 +51,5 @@ To streamline physical boarding at the terminal, VRS implements a real-time **QR
 
 ## Development Status & Roadmap
 
-- **Core Web Platform**: **Complete** — Fully functional admin management suite and client booking portal.
+- **Core Web Platform**: **Complete** — Fully functional admin management suite and client booking portal ready for client deployment.
 - **Cross-Platform Mobile Apps (iOS & Android)**: **Under Active Development** — Native mobile companion applications undergoing client review and user interface finalization.

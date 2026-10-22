@@ -2,9 +2,11 @@
 title: "CHRONO (Centralized Human Resource Operating Network Overseer)"
 description: "Enterprise HR ecosystem featuring automated biometric punchtime parsing, dynamic DTR generation, and centralized version-controlled utility distribution."
 tags: ["PHP", "Laravel", "MySQL", "JavaScript", "REST API", "Tailwind CSS"]
-publishDate: 2026-02-01
+publishDate: 2026-08-12
 type: "dict"
+status: "Staging / Pre-Deployment"
 code: "CHRONO"
+featured: true
 github: "https://github.com/senior-zoren"
 ---
 
@@ -12,7 +14,7 @@ github: "https://github.com/senior-zoren"
 
 ## System Overview
 
-**CHRONO** is DICT's primary HR management and attendance ecosystem. It unifies administrative biometric collection with an automated, self-service web portal for Daily Time Record (DTR) generation and validation.
+**CHRONO** is DICT's primary HR management and attendance ecosystem. Deployed to staging and currently awaiting final administrative office order authorization for agency-wide rollout, it unifies administrative biometric collection with an automated, self-service web portal for Daily Time Record (DTR) generation and validation.
 
 The platform operates on a split-service architecture: an **Admin Desktop Utility (CHRONO Parser)** for localized data extraction and ingestion, and the **CHRONO Web Portal** for automated schedule reconciliation, validation, and official document generation.
 

@@ -2,9 +2,11 @@
 title: "DART (Accomplishment Report Tracker)"
 description: "Centralized regional data bank and executive dashboard tracking project milestones across key DICT programs for central offices and local government stakeholders."
 tags: ["PHP", "Laravel", "MySQL", "JavaScript", "Tailwind CSS"]
-publishDate: 2026-01-15
+publishDate: 2025-10-28
 type: "dict"
+status: "Active Production"
 code: "DART"
+featured: true
 github: "https://github.com/senior-zoren"
 ---
 

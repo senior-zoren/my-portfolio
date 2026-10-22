@@ -2,9 +2,11 @@
 title: "Scheduler (Executive Calendar & Booking System)"
 description: "Centralized calendar platform providing executive schedule visibility and structured appointment approval workflows."
 tags: ["PHP", "Laravel", "MySQL", "JavaScript", "Tailwind CSS"]
-publishDate: 2026-02-10
+publishDate: 2026-07-23
 type: "dict"
+status: "Active Production Utility"
 code: "Scheduler"
+featured: true
 github: "https://github.com/senior-zoren"
 ---
 
