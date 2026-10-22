@@ -34,3 +34,23 @@ The platform operates on a split-service architecture: an **Admin Desktop Utilit
 
 ### 3. Expiration Engine & Security SLAs
 - **Reference Number Lockout**: Each generated DTR is tied to a single-use reference number. Once processed, the underlying punchtime records expire (SLA Expiration) to prevent duplicate submissions or historical record tampering.
+
+---
+
+## Technical Challenges & Engineering Breakthroughs
+
+### 1. Biometric Log Cleanup Engine & Punchtime Normalization (CHRONO Parser)
+Processing raw biometric machine exports presented a significant engineering hurdle due to non-standardized timestamp sequencing and irregular log dumps. To transform noisy raw data into structured DTR records, I engineered a dedicated cleanup pipeline in the **CHRONO Parser** Windows desktop application:
+
+- **Rule-Based Punch Sequence Normalization**: Built a strict parameter parser that categorizes raw entries across four mandatory daily slots:
+  1. **Slot 1 (AM Arrival)**: First recorded morning punch.
+  2. **Slot 2 (AM Departure)**: Must initiate within the 12:00 PM boundary.
+  3. **Slot 3 (PM Arrival)**: Must also initiate within the 12:00 PM–1:00 PM grace window (distinct from Slot 2) to preserve on-time status.
+  4. **Slot 4 (PM Departure)**: Final evening departure punch.
+- **Unique Document Stamping (`doc_number`)**: Tagged each normalized record payload with a unique, single-use document number during client-side processing before transmitting the payload to the CHRONO Web Portal.
+
+### 2. Automated Biometric Key-ID Ingestion Engine
+To automate data delivery on the web platform without manual user intervention or administrative assignment:
+
+- **Relational Identity Lookup**: Mapped machine-registered biometric ID numbers directly to employee database profile keys.
+- **Zero-Touch DTR Distribution**: Upon receiving the parsed payload from the Windows desktop tool, the web portal automatically disperses punchtime records to their respective employee accounts instantly using Key-ID indexing.

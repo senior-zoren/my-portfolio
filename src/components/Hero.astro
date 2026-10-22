@@ -28,7 +28,27 @@ const techStack = [
   "Bootstrap",
   "MySQL",
   "PostgreSQL",
+  "OpenSSL / PNPKI",
   "Git"
+];
+
+const engineeringHighlights = [
+  {
+    title: "PNPKI Cryptographic Vault",
+    desc: "Reverse-engineered .p12 certificate decryption and OpenSSL legacy decoding for interactive digital document signing."
+  },
+  {
+    title: "Biometric Data Normalization",
+    desc: "Engineered rule-based punchtime cleanup parsers to sequence messy raw attendance dumps into structured DTR records."
+  },
+  {
+    title: "Binary Distribution & Security",
+    desc: "Built dynamic REST version control panels with semver metadata indexing and global API access kill-switches."
+  },
+  {
+    title: "Distributed Microservices",
+    desc: "Designed decoupled booking architectures and transactional APIs to eliminate race conditions on high-concurrency seat reservation."
+  }
 ];
 
 // Helper function to resolve status badge labels safely
@@ -67,8 +87,25 @@ function getProjectStatus(project: CollectionEntry<'projects'>): string {
     </div>
 
     <p class="text-slate-600 text-base leading-relaxed max-w-2xl">
-      Specializing in web application backends, desktop utilities, REST API integrations, and database design using PHP and Python frameworks.
+      Specializing in enterprise web application backends, custom desktop utilities, REST API integrations, and low-level data parsing using PHP and Python frameworks.
     </p>
+
+    <!-- Engineering Highlights Grid -->
+    <div class="pt-4 border-t border-stone-200/80 space-y-3">
+      <span class="text-[11px] font-semibold uppercase tracking-wider text-stone-400 block">Key Technical Solutions & Achievements</span>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {engineeringHighlights.map((feat) => (
+          <div class="p-3 bg-white border border-stone-200 rounded-lg space-y-1 shadow-2xs">
+            <h4 class="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+              <span class="text-emerald-600">✓</span> {feat.title}
+            </h4>
+            <p class="text-[11px] text-stone-600 leading-normal">
+              {feat.desc}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
 
     <!-- Core Stack Pills -->
     <div class="pt-2 border-t border-stone-200/80 space-y-2">

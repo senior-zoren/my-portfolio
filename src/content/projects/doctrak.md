@@ -33,3 +33,21 @@ The platform streamlines high-volume paperwork by combining automated PDF compli
 ### 3. PNPKI Cryptographic Signing & Inter-Office Routing
 - **PNPKI `.p12` Certificate Integration**: Allows originators and approving authorities to apply legally binding cryptographic signatures using Philippine National Public Key Infrastructure (`.p12` certificates).
 - **Human-Controlled Routing Execution**: Gives users granular control to initiate the routing cycle, dispatching signed documents directly to HR, division heads, or designated signatories with full audit trails.
+
+---
+
+## Technical Challenges & Engineering Breakthroughs
+
+### 1. Reverse-Engineering PNPKI Integration & Certificate Vault Architecture
+Integrating the Philippine National Public Key Infrastructure (PNPKI) presented a major technical challenge due to a lack of open-source SDK documentation or disclosed implementation modules from other agency systems (e.g., DSWD Region 8). 
+
+To resolve this, I independently investigated and engineered a dedicated **Certificate Vault Service**:
+- **Atomic Registration**: Securely stores and registers encrypted `.p12` certificate files alongside the user's transparent `.png` signature stamp within a single request.
+- **Passphrase-Gated Decryption**: Built an automated unlocking mechanism inside the service class that decrypts and validates `.p12` certificates on demand using the user's registered passphrase.
+- **OS-Agnostic OpenSSL Helper**: Designed a low-level helper function to locate host system OpenSSL executables across varying OS paths and handle legacy PKCS#12 decoding seamlessly during verification.
+
+### 2. Interactive Drag-and-Drop Stamping vs. Template Lookups
+In template-bound government platforms, digital signatures are typically constrained to fixed Key-ID lookups on pre-generated documents. Because **DocTrak** operates strictly as an agnostic routing engine—handling arbitrary external uploads rather than generating native forms—the traditional Key-ID lookup model was insufficient.
+
+- **Unified Interactive Stamping**: Implemented an intuitive drag-and-drop box interface allowing users to visually position their signature stamp, apply their PNPKI certificate, and authenticate external documents in a single request.
+- **Immediate Mutated Dispatch**: Mutates, stamps, and cryptographically signs external PDF files on the fly, making downloadable signed files immediately available upon routing cycle completion.

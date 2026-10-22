@@ -42,6 +42,24 @@ A prime example of App-Repo's API distribution pipeline is its integration with 
 
 ---
 
+## Technical Challenges & Engineering Solutions
+
+### 1. Structured Version Publishing & Deployment Metadata Pipeline
+Designing a reliable version control and artifact distribution system required a standardized, error-proof release pipeline for application updates:
+
+- **Target Application & SemVer Tagging**: Each release requires explicit target application selection, semantic versioning (`v1.0.0`), and target platform declaration (Windows, macOS, Linux, or Universal architectures).
+- **Mandatory Update Flagging**: Implemented a **"Mark as Mandatory Update"** enforcement toggle. When enabled, desktop client startups (such as the CHRONO Parser) automatically force update installations before granting operational access.
+- **Binary Package Processing & Checksums**: Supports direct drag-and-drop binary uploads (up to 500MB) with Markdown-formatted changelogs and automated server-side checksum calculation for integrity validation.
+
+### 2. Security & Global API Access Control
+To prevent unauthorized downloads during live release staging or in the event of suspicious traffic:
+
+- **Centralized API Kill-Switch**: Built a primary **API Access Control** toggle in the main dashboard that enables or disables API access across all client endpoints (`/api/v1/apps/{slug}/latest`) with a single click.
+- **Deployment Staging Safety**: Allows administrators to disable API access while publishing or staging new application builds, ensuring public client applications cannot fetch half-uploaded or unverified binaries until explicitly toggled back on.
+- **Threat Mitigation**: Serves as an immediate system-wide security lock if suspicious activity, API abuse, or security risks are detected.
+
+---
+
 ## Technical Highlights
 
 - **RESTful Integration API**: Structured endpoints returning release manifests, direct binary download streams, and build status checks.

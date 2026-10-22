@@ -49,6 +49,17 @@ To streamline physical boarding at the terminal, VRS implements a real-time **QR
 
 ---
 
+## Technical Challenges & Engineering Lessons
+
+### First Major Microservices & Distributed Data Architecture
+Developing VRS represented my first experience engineering a major-scale microservices system. Splitting the platform into isolated sub-services (Client Booking Portal vs. Admin Terminal Hub) presented critical data architecture challenges:
+
+- **Cross-Service Data Synchronization**: Solved the challenge of enabling two independent services to securely store, query, and render shared state (such as real-time seat locks and terminal manifests) without direct database coupling.
+- **REST API Mastery**: Deepened my expertise in designing RESTful endpoints, API authentication contracts, and transactional request handling to prevent race conditions during concurrent passenger bookings.
+- **Isolated Lifecycle Deployment**: Achieved modular service separation, ensuring terminal administrative operations remain fully functional and resilient even during peak passenger traffic on the public booking portal.
+
+---
+
 ## Development Status & Roadmap
 
 - **Core Web Platform**: **Complete** — Fully functional admin management suite and client booking portal ready for client deployment.
